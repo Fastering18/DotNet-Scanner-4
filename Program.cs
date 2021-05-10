@@ -85,8 +85,7 @@ class Program
 
         // Login and connect.
         await _client.LoginAsync(TokenType.Bot,
-            "ODM5MzM3Nzk1MzgyMTQ5MTMw.YJIMPA.ICLo8LOtQSXjbaZRUdEtX2XwcYQ"
-            /*Environment.GetEnvironmentVariable("DiscordToken")*/);
+            Environment.GetEnvironmentVariable("BotToken"));
         await _client.StartAsync();
 
         await _client.SetGameAsync(type: ActivityType.Watching, name: "blackerz.tk (discord.Net)");
