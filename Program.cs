@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using DynamicExpresso;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -48,7 +49,7 @@ class Program
     private static IServiceProvider ConfigureServices()
     {
         var map = new ServiceCollection();
-            // Repeat this for all the service classes
+            // repeat
             //.AddSingleton(new SomeServiceClass());
 
         return map.BuildServiceProvider();
@@ -83,7 +84,6 @@ class Program
     {
         await InitCommands();
 
-        // Login and connect.
         await _client.LoginAsync(TokenType.Bot,
             Environment.GetEnvironmentVariable("BotToken"));
         await _client.StartAsync();
@@ -132,6 +132,19 @@ class Program
         else if (command == "ping")
         {
             await msg.Channel.SendMessageAsync(_client.Latency.ToString() + "ms");
+        }
+        else if (command == "eval")
+        {
+            try
+            {
+                var interpreter = new Interpreter().SetVariable("client", _client).SetVariable("message", msg);
+                Lambda parsedExpression = interpreter.Parse(String.Join(" ", args).Substring(command.Length), new Parameter("pi", typeof(double)));
+                var hasileval = parsedExpression.Invoke(3.14);
+                await msg.Channel.SendMessageAsync("```csharp\n" + hasileval + "\n```");
+            } catch(Exception err)
+            {
+                await msg.Channel.SendMessageAsync("```csharp\n" + err.Message.Substring(0, err.Message.Length > 1980 ? 1980 : err.Message.Length) + "\n```");
+            }
         }
 
         //if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
