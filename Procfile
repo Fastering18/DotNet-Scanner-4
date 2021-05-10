@@ -1,1 +1,1 @@
-worker: dotnet run Program.cs
+worker: cd /app/heroku_output && ./ConsoleApp1
