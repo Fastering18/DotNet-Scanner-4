@@ -8,6 +8,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Text.RegularExpressions;
+using BlackerzDotNet;
 
 class Program
 {
@@ -29,7 +30,7 @@ class Program
             //MessageCacheSize = 50,
 
         });
-
+        
         _commands = new CommandService(new CommandServiceConfig
         {
             LogLevel = LogSeverity.Info,
@@ -43,7 +44,7 @@ class Program
         _commands.Log += Log;
 
         _services = ConfigureServices();
-
+        
     }
 
     private static IServiceProvider ConfigureServices()
@@ -85,7 +86,8 @@ class Program
         await InitCommands();
 
         await _client.LoginAsync(TokenType.Bot,
-            Environment.GetEnvironmentVariable("BotToken"));
+            "ODM5MzM3Nzk1MzgyMTQ5MTMw.YJIMPA.-kucsvLZ02cF2mXQV8IKKNyG_cM"
+            /*Environment.GetEnvironmentVariable("DiscordToken")*/);
         await _client.StartAsync();
 
         await _client.SetGameAsync(type: ActivityType.Watching, name: "blackerz.tk (discord.Net)");
@@ -144,6 +146,36 @@ class Program
             } catch(Exception err)
             {
                 await msg.Channel.SendMessageAsync("```csharp\n" + err.Message.Substring(0, err.Message.Length > 1980 ? 1980 : err.Message.Length) + "\n```");
+            }
+        } else if (command == "botinfo")
+        {
+            if (args.Length < 2)
+            {
+                await msg.Channel.SendMessageAsync("No client id present.");
+                return;
+            }
+            string botId = args.GetValue(1).ToString();
+            try
+            {
+                BotData thebot = await BlackerzBot.GetBotData(botId);
+                if (thebot == default(BotData))
+                {
+                    await msg.Channel.SendMessageAsync("No bot found from database.");
+                    return;
+                }
+                Console.WriteLine(thebot.GetInviteLink());
+                var embed = new EmbedBuilder()
+                .WithColor(new Color(26, 155, 226))
+                .WithTitle("**" + thebot.Name + "** Bot")
+                .WithDescription("**Bot Info:** " + thebot.Tag + " | `" + thebot.Id + "`\n**Owner:** " + thebot.Owner.Name + " | `" + thebot.Owner.Id + "`\n**Upvotes:** " + thebot.Upvotes + "\n**Invite link:** [Click me](" + thebot.GetInviteLink() + ")\n**Prefix:** `" + thebot.Prefix + "`\n\n" + thebot.ShortDescription)
+                .WithThumbnailUrl(thumbnailUrl: BlackerzBot.AvatarOf(thebot.Id, thebot.Avatar))
+                .WithCurrentTimestamp()
+                .Build();
+                await msg.Channel.SendMessageAsync(embed: embed);
+            } catch(Exception e)
+            {
+                Console.WriteLine(e);
+                await msg.Channel.SendMessageAsync("Failed to request..");
             }
         }
 
