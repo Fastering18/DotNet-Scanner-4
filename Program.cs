@@ -21,6 +21,7 @@ class Program
     private readonly char _prefix;
     private readonly CommandService _commands;
     private readonly IServiceProvider _services;
+    private readonly APIBot _blackerzbot;
 
     private Program()
     {
@@ -45,6 +46,7 @@ class Program
 
         _services = ConfigureServices();
         
+        _blackerzbot = new APIBot("fUOmjlvBmgDXNYFdqJtNqf", BotID: 839337795382149130);
     }
 
     private static IServiceProvider ConfigureServices()
@@ -90,7 +92,9 @@ class Program
         await _client.StartAsync();
 
         await _client.SetGameAsync(type: ActivityType.Watching, name: "blackerz.tk (discord.Net)");
-
+         
+        await _blackerzbot.Verify();
+        
         await Task.Delay(Timeout.Infinite);
     }
 
@@ -176,6 +180,10 @@ class Program
                 Console.WriteLine(e);
                 await msg.Channel.SendMessageAsync("Failed to request..");
             }
+        } else if (command == "cekvote") 
+        {
+             Voted VoteResult = _blackerzbot.CheckUserVote((ulong)msg.Author.Id);
+             await msg.Channel.SendMessageAsync(VoteResult.IsVoted.toString());
         }
 
         //if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
