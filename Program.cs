@@ -183,8 +183,8 @@ class Program
         } else if (command == "cekvote") 
         {
              Voted VoteResult = await _blackerzbot.CheckUserVote((ulong)msg.Author.Id);
-             System.Console.WriteLine("vote: {0}\nvrified: {1}\ndev vrified: {2}", VoteResult, VoteResult.IsVoted(), _blackerzbot.IsVerified);
-             await msg.Channel.SendMessageAsync(VoteResult.IsVoted() == true ? "Your user marked as voted" : "Your user havent voted our bot Scanner 4");
+             System.Console.WriteLine("vote: {0}\nvrified: {1} & {3} - {4}\ndev vrified: {2}", VoteResult, VoteResult.IsVoted(), _blackerzbot.IsVerified, VoteResult.vote == 1, VoteResult.vote);
+             await msg.Channel.SendMessageAsync(VoteResult.IsVoted() == true || VoteResult.vote == 1 ? "Your user marked as voted" : "Your user havent voted our bot Scanner 4");
         }
 
         //if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
