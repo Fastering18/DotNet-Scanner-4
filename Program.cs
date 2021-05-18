@@ -183,7 +183,7 @@ class Program
         } else if (command == "cekvote") 
         {
              Voted VoteResult = _blackerzbot.CheckUserVote((ulong)msg.Author.Id);
-             await msg.Channel.SendMessageAsync(VoteResult.IsVoted.toString());
+             await msg.Channel.SendMessageAsync(VoteResult.IsVoted == true ? "Your user marked as voted" : "Your user havent voted our bot Scanner 4");
         }
 
         //if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
