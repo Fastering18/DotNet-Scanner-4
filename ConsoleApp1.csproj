@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blackerz.Client.Bot" Version="1.0.27" />
+    <PackageReference Include="Blackerz.Client.Bot" Version="1.0.28" />
     <PackageReference Include="Discord.Net" Version="2.3.1" />
     <PackageReference Include="DynamicExpresso.Core" Version="2.4.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
